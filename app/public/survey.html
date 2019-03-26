@@ -156,8 +156,27 @@
                         </select>
                 </div>
 
-                <button type="submit" id = "submit" class="btn btn-primary">Submit Form</button>
+                <button type="submit" id = "submit" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Submit Form</button>
         </form>
+
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLabel">Your Most Compatible Friend</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body" id="friend">
+                        
+                      
+                    </div>
+                    
+                  </div>
+                </div>
+        </div>
+
     </div>
 
 <script>
@@ -182,8 +201,12 @@
         };
         console.log(friend);
 
-        $.post("/api/friends", friend).then(function(){
+        $.post("/api/friends", friend).then(function(res){
             console.log("You added this friend: " + JSON.stringify(friend));
+            console.log(res);
+
+            
+            $("#friend").html(res.name + "<br>" + "<img src =" + res.pic + " style=width:300px;height:300px;>");
 
         });
 

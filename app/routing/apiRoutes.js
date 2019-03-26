@@ -7,9 +7,7 @@ var path = require("path");
 var friendArray = require("../data/friends.js");
 
 api_router.get("/api/friends", function(req, res){
-    //res.send("Hello from api friends");
-    //res.sendFile(path.join(__dirname, "../data/friends.js"));
-    //res.sendFile(friendArray);
+    
     return res.json(friendArray)
 });
 
@@ -29,6 +27,7 @@ api_router.post("/api/friends", function(req,res){
     
 
     //loop through the friends array and compare the scores array of friendArray[i] to the scores of the new user. 
+    var userArray = getUserArray(friendArray, newFriend)
     //This will give you a "difference" array of the absolute differnce between the index values of the new user 
     //compared to a friend in the friendArray.
     //Then loop through the differnce array and add the values to get a total_dif score (the total difference score
@@ -36,8 +35,31 @@ api_router.post("/api/friends", function(req,res){
     //Create a user object that has the name, photo, and total_dif score for the friend at friendArray[i],
     //and then add the user to the userArray.
 
-     var userArray = [];
-     for(var i = 0; i< friendArray.length -1; i++){
+     //var userArray = [];
+
+     
+    console.log(userArray);
+
+//****** Logic to get most compatible friend from userArray*******////
+//Set the most_compatible friend to the first user in the user array.
+//Loop through the userArray and if you find a user who has a total_difference
+//less than the first user, update most_compatible to be that user.
+
+    var most_compatible = getMostComp(userArray);
+    
+
+    console.log("Most compatible: " + most_compatible.name);
+    console.log("Most compatible: " + most_compatible.pic);
+    console.log("Most compatible: " + most_compatible.total_difference);
+
+
+    res.json(most_compatible);
+
+});
+
+function getUserArray(friendArray, newFriend) {
+    var userArray = [];
+    for(var i = 0; i< friendArray.length -1; i++){
 
         var difference = newFriend.scores.map(function(item, index) {
         
@@ -63,29 +85,25 @@ api_router.post("/api/friends", function(req,res){
         //console.log(userArray);
         
     };
+    return userArray;
+};
 
-    console.log(userArray);
 
-//****** Logic to get most compatible friend from userArray*******////
-//Set the most_compatible friend to the first user in the user array.
-//Loop through the userArray and if you find a user who has a total_difference
-//less than the first user, update most_compatible to be that user.
-
+function getMostComp(userArray){
     var most_compatible = userArray[0];
     for (var i = 0; i< userArray.length; i++){
         if(userArray[i].total_difference < most_compatible.total_difference){
             most_compatible = userArray[i];
         }
     }
-
-    console.log("Most compatible: " + most_compatible.name);
-    console.log("Most compatible: " + most_compatible.pic);
-    console.log("Most compatible: " + most_compatible.total_difference);
+    return most_compatible;
+    // console.log("Most compatible: " + most_compatible.name);
+    // console.log("Most compatible: " + most_compatible.pic);
+    // console.log("Most compatible: " + most_compatible.total_difference);
         
+};
+ 
 
-    
-
-});
 
 module.exports = api_router;
 
