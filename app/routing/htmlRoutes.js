@@ -9,7 +9,7 @@ var path = require("path");
 
 router.get("/", function(req, res) {
     //res.send("About this home");
-    res.sendFile(path.join(__dirname, "../public/home.html"));
+    res.sendFile(path.join(__dirname, "../public/index.html"));
 })
 
 router.get("/survey", function(req, res) {
